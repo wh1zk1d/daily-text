@@ -8,17 +8,17 @@ const log = console.log
 const SITE = process.env.SITE
 
 perf.start()
-log(`${emoji.find('truck').emoji} Loading daily text`)
+log(`${emoji.find('hourglass').emoji} Crawling daily text`)
 
 puppeteer
-  .launch()
-  .then(async browser => {
+  .launch({ headless: false })
+  .then(async (browser) => {
     const page = await browser.newPage()
     await page.goto(SITE)
 
-    const date = await page.$eval('header h2', el => el.textContent)
-    const scripture = await page.$eval('.themeScrp', el => el.textContent)
-    const comment = await page.$eval('.bodyTxt', el => el.textContent)
+    const date = await page.$eval('header h2', (el) => el.textContent)
+    const scripture = await page.$eval('.themeScrp', (el) => el.textContent)
+    const comment = await page.$eval('.bodyTxt', (el) => el.textContent)
 
     await browser.close()
 
@@ -30,6 +30,6 @@ puppeteer
     const execSec = execTime.time / 1000
     log(`\n${emoji.find('sparkles').emoji} Finished in ${execSec.toFixed(2)}s`)
   })
-  .catch(err => {
+  .catch((err) => {
     log(err)
   })
